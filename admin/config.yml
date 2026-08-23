@@ -1,0 +1,124 @@
+# ─────────────────────────────────────────────────────────────────────────────
+# Pannello di redazione (Decap CMS) — l'interfaccia con cui Alberto pubblica
+# eventi e locali da solo, senza passare da Jacopo.
+#
+# Come funziona la catena:
+#   Alberto salva nel pannello  →  commit su GitHub  →  GitHub Actions ricostruisce
+#   il sito  →  i file finiscono su Hostinger via FTP.  Tempo tipico: 2-3 minuti.
+#
+# ⚠️ DA VERIFICARE — tre valori senza i quali il pannello non parte:
+#     • repo      → utente-github/nome-repository
+#     • branch    → di solito "main"
+#     • base_url  → l'indirizzo del servizio OAuth (vedi README.md)
+# ─────────────────────────────────────────────────────────────────────────────
+
+backend:
+  name: github
+  repo: UTENTE/REPOSITORY # ⚠️ DA VERIFICARE
+  branch: main # ⚠️ DA VERIFICARE
+  # Su Hostinger non c'è Netlify Identity: serve un piccolo servizio che
+  # gestisca il login GitHub. Vedi README.md → "Pannello di redazione".
+  base_url: https://DA-CONFIGURARE.example.com # ⚠️ DA VERIFICARE
+  auth_endpoint: auth
+
+# Lingua dell'interfaccia.
+locale: it
+
+# Le foto caricate dal pannello finiscono dove finiscono quelle di Jacopo.
+media_folder: public/img
+public_folder: /img
+
+# Anteprima disattivata: mostrerebbe un'impaginazione che non è quella del
+# sito, e vedere una finta anteprima è peggio che non vederne nessuna.
+show_preview_links: false
+
+collections:
+  # ───────────────────────────────────────────────────────────────── EVENTI
+  - name: eventi
+    label: Eventi
+    label_singular: Evento
+    folder: src/content/eventi
+    create: true
+    slug: "{{year}}-{{month}}-{{day}}-{{slug}}"
+    summary: "{{data}} — {{titolo}} ({{citta}})"
+    sortable_fields: [data, titolo]
+    description: >
+      Fiere, degustazioni e serate nei locali. Gli eventi passano da soli da
+      "in arrivo" a "dove siamo già stati" quando la data è trascorsa: non c'è
+      niente da spostare a mano. Ricordati la foto per quelli passati — sono
+      loro che tengono in piedi la pagina quando il calendario è vuoto.
+    fields:
+      - { name: titolo, label: Titolo, widget: string }
+      - { name: data, label: Data, widget: datetime, date_format: "DD/MM/YYYY", time_format: false, format: "YYYY-MM-DD" }
+      - name: dataFine
+        label: Data di fine
+        widget: datetime
+        date_format: "DD/MM/YYYY"
+        time_format: false
+        format: "YYYY-MM-DD"
+        required: false
+        hint: Solo se l'evento dura più di un giorno.
+      - { name: luogo, label: Luogo, widget: string, hint: "Il nome del posto: «Enoteca…», «Fiera di…»" }
+      - { name: citta, label: Città, widget: string }
+      - { name: provincia, label: Provincia, widget: string, required: false, hint: "Sigla, es. VC" }
+      - name: descrizione
+        label: Descrizione
+        widget: text
+        required: false
+        hint: Due righe al massimo, tono asciutto.
+      - { name: immagine, label: Foto, widget: image, required: false }
+      - name: alt
+        label: Descrizione della foto
+        widget: string
+        required: false
+        hint: Che cosa si vede nella foto. Serve a chi non può vederla.
+      - { name: link, label: Link esterno, widget: string, required: false }
+      - name: bozza
+        label: Bozza
+        widget: boolean
+        default: true
+        hint: Finché è attivo, l'evento NON compare sul sito.
+
+  # ───────────────────────────────────────────────────────────────── LOCALI
+  - name: locali
+    label: Dove trovarci
+    label_singular: Locale
+    folder: src/content/locali
+    create: true
+    slug: "{{slug}}"
+    summary: "{{nome}} — {{citta}}"
+    sortable_fields: [nome, citta]
+    description: >
+      I locali che servono L'Alma. ATTENZIONE: un locale compare sul sito solo
+      se la casella "Consenso" è attiva. Nel dubbio lasciala spenta — la scheda
+      resta salvata qui, pronta, ma invisibile a chi visita il sito.
+    fields:
+      - { name: nome, label: Nome del locale, widget: string }
+      - name: tipo
+        label: Tipo
+        widget: select
+        options: [ristorante, enoteca, cocktail bar, bar, hotel, negozio, altro]
+      - { name: citta, label: Città, widget: string }
+      - { name: provincia, label: Provincia, widget: string, hint: "Sigla, es. VC" }
+      - { name: indirizzo, label: Indirizzo, widget: string, required: false }
+      - { name: sito, label: Sito web, widget: string, required: false }
+      - name: consenso
+        label: Consenso a comparire sul sito
+        widget: boolean
+        default: false
+        hint: >
+          Attivare SOLO dopo che il locale ha detto sì. Senza questo, il nome
+          non viene pubblicato.
+      - name: consensoLogo
+        label: Consenso all'uso del logo
+        widget: boolean
+        default: false
+        hint: >
+          È un permesso diverso: «puoi nominarmi» non vuol dire «puoi usare il
+          mio marchio».
+      - { name: logo, label: Logo, widget: image, required: false }
+      - name: nota
+        label: Nota
+        widget: string
+        required: false
+        hint: Una riga, se il locale ha qualcosa di suo che vale la pena dire.

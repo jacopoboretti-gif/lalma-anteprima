@@ -1,0 +1,8 @@
+Le fotografie vanno qui.
+
+Sottocartelle:
+  eventi/  foto degli eventi passati
+  locali/  eventuali loghi dei locali (solo con consenso esplicito)
+
+Poi si collega il percorso nel componente <Figura src="/img/nome-file.jpg">.
+Elenco completo delle immagini attese: README.md

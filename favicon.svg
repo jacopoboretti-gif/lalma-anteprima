@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="L'Alma">
+  <!-- ⚠️ DA VERIFICARE: favicon provvisoria, monogramma tipografico.
+       Da sostituire se esiste un marchio grafico de L'Alma. -->
+  <rect width="64" height="64" fill="#14100c"/>
+  <text
+    x="32" y="45"
+    font-family="Bodoni MT, Didot, Georgia, serif"
+    font-size="42"
+    text-anchor="middle"
+    fill="#d0a468"
+  >A</text>
+</svg>

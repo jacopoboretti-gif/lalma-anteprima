@@ -1,0 +1,24 @@
+<!doctype html>
+<html lang="it">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <!-- Il pannello non deve finire nei risultati di ricerca. -->
+    <meta name="robots" content="noindex, nofollow" />
+    <title>L'Alma — Gestione contenuti</title>
+  </head>
+  <body>
+    <!--
+      Pannello di redazione per Alberto: da qui pubblica eventi e locali senza
+      toccare il codice. Ogni salvataggio diventa un commit su GitHub, e il
+      commit fa ripartire la build e il caricamento su Hostinger.
+
+      ⚠️ DA VERIFICARE prima che funzioni davvero — vedi README.md, sezione
+         "Pannello di redazione". Servono due cose:
+         1. i valori `repo` e `branch` in config.yml
+         2. un servizio OAuth che faccia da ponte con GitHub (`base_url`),
+            perché su Hostinger non c'è Netlify Identity a farlo per noi.
+    -->
+    <script src="https://unpkg.com/decap-cms@^3.8.4/dist/decap-cms.js"></script>
+  </body>
+</html>
